@@ -227,5 +227,5 @@ These libraries handle caching, deduping identical in-flight requests, and backg
 ## Next Steps
 
 Continue with:
-- **Performance Optimization** - avoiding unnecessary re-renders and re-fetches
-- **Testing** - mocking fetch calls in component tests
+- **[Performance Optimization](/React/Performance-Optimization)** - avoiding unnecessary re-renders and re-fetches
+- **[Testing](/React/Testing)** - mocking fetch calls in component tests

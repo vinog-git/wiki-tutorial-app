@@ -514,7 +514,7 @@ SELECT COUNT(total_price)  FROM orders;  -- Skips rows where total_price IS NULL
 ## Next Steps
 
 Learn about:
-- GROUP BY and HAVING to apply aggregates per group
+- [GROUP BY and HAVING](/SQL/GROUP-BY-and-HAVING) to apply aggregates per group
 - Window functions for row-level aggregates (no collapsing)
-- Subqueries that reference aggregate results
+- [Subqueries](/SQL/Subqueries) that reference aggregate results
 - CTEs (WITH clauses) for readable multi-step aggregations

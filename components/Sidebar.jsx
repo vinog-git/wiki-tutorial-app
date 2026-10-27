@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Sidebar({ topics, selectedTopic, onSelectTopic, heading = 'Topics', onBack, backLabel, labels }) {
+export default function Sidebar({ topics, selectedTopic, onSelectTopic, onBack, backLabel, labels }) {
   return (
     <aside className="sidebar">
       {onBack && (
@@ -9,9 +9,28 @@ export default function Sidebar({ topics, selectedTopic, onSelectTopic, heading 
         </button>
       )}
 
-      <div className="sidebar-header">
-        <h2>{heading}</h2>
-      </div>
+      {topics.length > 0 && (
+        <select
+          className="topic-dropdown"
+          aria-label="Page"
+          value={selectedTopic ?? ''}
+          onChange={(e) => {
+            onSelectTopic(e.target.value);
+            e.target.blur();
+          }}
+        >
+          {selectedTopic == null && (
+            <option value="" disabled>
+              Choose a page
+            </option>
+          )}
+          {topics.map((topic) => (
+            <option key={topic} value={topic}>
+              {labels?.[topic] ?? topic.replace(/-/g, ' ')}
+            </option>
+          ))}
+        </select>
+      )}
 
       <div className="topics-list">
         {topics.length === 0 ? (

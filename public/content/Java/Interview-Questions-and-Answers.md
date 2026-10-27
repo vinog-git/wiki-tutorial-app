@@ -194,4 +194,4 @@ The default scope is **singleton** - one shared instance per Spring container. O
 
 ## Next Steps
 
-For microservices-specific interview questions (service discovery, resilience patterns, distributed tracing, Kafka), see **Microservices Interview Preparation**.
+For microservices-specific interview questions (service discovery, resilience patterns, distributed tracing, Kafka), see **[Microservices Interview Preparation](/Java/Microservices-Interview-Prep)**.

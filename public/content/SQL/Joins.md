@@ -308,6 +308,6 @@ The reason it works is that the unmatched rows are exactly the ones the join fil
 
 Learn about:
 - GROUP BY and aggregate functions
-- Subqueries with joins
+- [Subqueries](/SQL/Subqueries) with joins
 - Window functions
 - Query optimization

@@ -167,7 +167,7 @@ function Stopwatch() {
 }
 ```
 
-> Note: In React 19, `ref` can be passed as a normal prop to function components - `forwardRef` is no longer required. See the React 19 New Features page.
+> Note: In React 19, `ref` can be passed as a normal prop to function components - `forwardRef` is no longer required. See the [React 19 New Features](/React/React-19-New-Features) page.
 
 ## useMemo - Memoizing Expensive Calculations
 
@@ -407,5 +407,5 @@ function Settings() {
 ## Next Steps
 
 Continue with:
-- **Forms** - controlled inputs and React 19 Actions
-- **React 19 New Features** - `use()`, `useOptimistic`, `useActionState`
+- **[Forms](/React/Forms)** - controlled inputs and React 19 Actions
+- **[React 19 New Features](/React/React-19-New-Features)** - `use()`, `useOptimistic`, `useActionState`

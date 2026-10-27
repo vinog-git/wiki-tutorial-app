@@ -362,7 +362,7 @@ export class ConsumerComponent {
 
 1. **Single Responsibility** - Each component should do one thing
 2. **Use @Input and @Output** - For parent-child communication
-3. **Use Services** - For sharing data between unrelated components
+3. **Use [Services](/Angular/Services)** - For sharing data between unrelated components
 4. **Unsubscribe** - Remember to unsubscribe from observables
 5. **Use OnPush Detection** - For better performance
 6. **Keep Templates Simple** - Move complex logic to component class
@@ -370,8 +370,8 @@ export class ConsumerComponent {
 ## Next Steps
 
 Learn about:
-- Services and dependency injection
-- Routing and navigation
-- HTTP client for API calls
-- Forms (template-driven and reactive)
+- [Services](/Angular/Services) and dependency injection
+- [Routing](/Angular/Routing) and navigation
+- [HTTP client](/Angular/HTTP-Client) for API calls
+- [Forms](/Angular/Forms) (template-driven and reactive)
 - RxJS and Observables

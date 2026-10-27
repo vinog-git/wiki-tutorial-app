@@ -60,9 +60,9 @@ RAG answers questions from documents in one retrieval and one answer. An agent c
 
 ## Setting it up and seeing it run
 
-The step-by-step setup is on the Agentic AI Setup page. It uses the RAG lab's three tools with a local model, so you can watch the loop run, and then add a tool of your own.
+The step-by-step setup is on the [Agentic AI Setup](/AI/Agentic-AI-Setup) page. It uses the RAG lab's three tools with a local model, so you can watch the loop run, and then add a tool of your own.
 
-For live examples of agents handling support tickets, incident triage, and code review, see Agentic AI Realtime Examples.
+For live examples of agents handling support tickets, incident triage, and code review, see [Agentic AI Realtime Examples](/AI/Agentic-AI-Realtime-Examples).
 
 ## Evaluating agents
 
@@ -73,4 +73,4 @@ Evaluate an agent on a fixed set of tasks, each with an expected outcome. Record
 - **Steps and cost.** Average steps, model calls, tokens, and time per task.
 - **Failure type.** Wrong tool, loop, hallucinated result, or unsafe action.
 
-Re-run the set after every change to a prompt or tool description. Small wording changes can shift behavior a lot. See LLM evaluation for how to build the test set.
+Re-run the set after every change to a prompt or tool description. Small wording changes can shift behavior a lot. See [LLM evaluation](/AI/LLM-Evaluation) for how to build the test set.

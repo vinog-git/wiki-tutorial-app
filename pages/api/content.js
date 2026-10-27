@@ -23,6 +23,21 @@ function withHeadingIds() {
     return `<h${level} id="${id}">${text}</h${level}>\n`;
   };
 
+  // A root-relative link such as [Collections](/Java/Collections) points at
+  // another topic. Rewrite it to the app's own URL so it opens that page.
+  renderer.link = (href, title, text) => {
+    const [category, ...rest] = href.slice(1).split('/');
+    const subtopic = rest.pop();
+    const example = rest.pop();
+    if (!href.startsWith('/') || href.startsWith('//') || !category || !subtopic) {
+      return marked.Renderer.prototype.link.call(renderer, href, title, text);
+    }
+    const query = new URLSearchParams({ category, subtopic });
+    if (example) query.set('example', example);
+    const titleAttr = title ? ` title="${title}"` : '';
+    return `<a href="/?${query}"${titleAttr}>${text}</a>`;
+  };
+
   return renderer;
 }
 

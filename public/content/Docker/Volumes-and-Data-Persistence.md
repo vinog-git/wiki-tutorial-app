@@ -116,4 +116,4 @@ docker run -d --read-only \
 - Container writable layers are temporary. Use named volumes for data, bind mounts for development.
 - `docker compose down -v`, `volume prune` and `system prune --volumes` delete data. Know them before running them.
 - Named volumes copy image ownership on first use; set UIDs and permissions in the Dockerfile.
-- Backups are a separate concern: see Data Recovery and Backup.
+- Backups are a separate concern: see [Data Recovery and Backup](/Docker/Data-Recovery-and-Backup).

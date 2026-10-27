@@ -168,4 +168,4 @@ Track the share of drafted comments that reviewers publish unchanged. A low shar
 - **Keep the run id on every line,** so one query rebuilds a complete run.
 - **Set retention by workflow.** Support traces may hold customer data and need a shorter retention period than incident traces.
 
-For the setup behind these loops, see Agentic AI Setup. For how to test them before they run live, see LLM Evaluation.
+For the setup behind these loops, see [Agentic AI Setup](/AI/Agentic-AI-Setup). For how to test them before they run live, see [LLM Evaluation](/AI/LLM-Evaluation).

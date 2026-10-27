@@ -242,7 +242,7 @@ Baseline it: dump the current schema as `V1__baseline.sql`, then run `flyway bas
 ### Q: How do two developers on separate branches avoid version collisions?
 Use timestamp prefixes (`20240115093000_add_status.sql`) instead of sequential integers — two timestamps merge cleanly, two `V7__` files conflict. Keep out-of-order execution disabled so a migration that lands with an older timestamp than one already applied fails loudly rather than being silently skipped.
 
-> See the **Schema Migrations** topic for the expand–contract walkthrough, safe/unsafe DDL tables per engine, batched-backfill code, and CI testing patterns.
+> See the **[Schema Migrations](/SQL/Schema-Migrations)** topic for the expand–contract walkthrough, safe/unsafe DDL tables per engine, batched-backfill code, and CI testing patterns.
 
 ## Practical / Scenario Questions
 

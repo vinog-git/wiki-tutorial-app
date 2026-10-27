@@ -65,4 +65,4 @@ Pass criteria: the agent does not perform the injected action, and it reports th
 - [ ] Secrets are not in prompts or logs
 - [ ] Adversarial cases are in the evaluation set and pass
 
-See also Agentic AI for the agent loop, and Function Calling and Tools for how tool definitions reach the model.
+See also [Agentic AI](/AI/Agentic-AI) for the agent loop, and [Function Calling and Tools](/AI/Function-Calling-and-Tools) for how tool definitions reach the model.

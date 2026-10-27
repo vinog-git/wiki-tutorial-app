@@ -99,7 +99,7 @@ Default parameters only kick in for `undefined`, **not** for other falsy values.
 
 ## Props Are Read-Only
 
-A component must never modify its own props. Props flow **one-way**, from parent to child. If a child needs to change something in the parent, the parent passes down a *function* as a prop (see State and Events).
+A component must never modify its own props. Props flow **one-way**, from parent to child. If a child needs to change something in the parent, the parent passes down a *function* as a prop (see [State and Events](/React/State-and-Events)).
 
 ```jsx
 function Bad({ count }) {
@@ -293,5 +293,5 @@ A literal **`0` appears on the page**. `0 && x` evaluates to `0`, and React rend
 ## Next Steps
 
 Continue with:
-- **State and Events** - making components interactive with `useState`
-- **Hooks Deep Dive** - `useEffect`, `useRef`, `useMemo`, `useReducer`
+- **[State and Events](/React/State-and-Events)** - making components interactive with `useState`
+- **[Hooks Deep Dive](/React/Hooks-Deep-Dive)** - `useEffect`, `useRef`, `useMemo`, `useReducer`

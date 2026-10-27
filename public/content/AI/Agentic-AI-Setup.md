@@ -165,4 +165,4 @@ Copy the file to the Tools area in Open WebUI, enable it for a chat, and ask abo
 
 ## Next
 
-Read the Agentic AI Realtime Examples page to see how these same loops run in support, incident, and review workflows, and what to log at each step.
+Read the [Agentic AI Realtime Examples](/AI/Agentic-AI-Realtime-Examples) page to see how these same loops run in support, incident, and review workflows, and what to log at each step.

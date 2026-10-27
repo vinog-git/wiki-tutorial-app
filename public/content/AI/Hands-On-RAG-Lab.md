@@ -2,7 +2,7 @@
 
 This lab builds retrieval-augmented generation (RAG) step by step, then gives an agent tools to show where RAG fits. You will run it on the Northwind Outfitters sample data in the `rag-lab` folder.
 
-Complete Setup Open WebUI Locally (the AI section) first, or at least have Ollama running with `llama3.2` and `nomic-embed-text`.
+Complete [Setup Open WebUI Locally](/AI/Setup-Open-WebUI-Locally) (the AI section) first, or at least have Ollama running with `llama3.2` and `nomic-embed-text`.
 
 ## Goals
 

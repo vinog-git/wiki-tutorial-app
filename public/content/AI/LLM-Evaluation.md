@@ -68,7 +68,7 @@ For RAG, measure retrieval on its own before judging answers:
 - **Hit rate at k.** Share of questions where the correct passage appears in the top k results.
 - **Mean reciprocal rank.** How high the correct passage ranks, on average.
 
-If hit rate is low, fix chunking or search before touching the prompt. A better prompt cannot recover a passage that was never retrieved. See Chunking Strategies.
+If hit rate is low, fix chunking or search before touching the prompt. A better prompt cannot recover a passage that was never retrieved. See [Chunking Strategies](/AI/Chunking-Strategies).
 
 ## Regression testing
 
@@ -92,4 +92,4 @@ Overall numbers can hide a case that got worse, and that case may be the one tha
 
 Build 30 cases from real questions this week. Run the RAG lab's sample questions through the same harness, then add your own. A small, honest test set is worth more than a large one nobody checks.
 
-See also Agentic AI Setup for an agent evaluation table.
+See also [Agentic AI Setup](/AI/Agentic-AI-Setup) for an agent evaluation table.

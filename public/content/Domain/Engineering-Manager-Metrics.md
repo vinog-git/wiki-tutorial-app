@@ -28,10 +28,10 @@ Look for the combination before you act on any one number.
 
 ## Deep dives
 
-- **DORA metrics.** The four delivery measures, with targets and the traps in measuring them.
-- **Flow metrics.** Cycle time, WIP, throughput, and Little's Law.
-- **Quality and incident metrics.** Defects, incident response, and rework.
-- **Team health metrics.** Signals that warn before delivery slips.
+- **[DORA metrics](/Domain/DORA-Metrics).** The four delivery measures, with targets and the traps in measuring them.
+- **[Flow metrics](/Domain/Flow-Metrics).** Cycle time, WIP, throughput, and Little's Law.
+- **[Quality and incident metrics](/Domain/Quality-and-Incident-Metrics).** Defects, incident response, and rework.
+- **[Team health metrics](/Domain/Team-Health-Metrics).** Signals that warn before delivery slips.
 - **Tracking metrics in real time.** How to collect these numbers automatically, with realtime examples from a sample team.
 
 ## Guidelines for using metrics

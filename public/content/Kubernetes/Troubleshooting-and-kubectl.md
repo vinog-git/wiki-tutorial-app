@@ -41,7 +41,7 @@ kubectl logs orders-7c9d5b8f6-q2mzx --previous
 Caused by: java.lang.IllegalStateException: Could not resolve placeholder 'DB_PASSWORD'
 ```
 
-The fix is to add the missing Secret reference (see the ConfigMaps and Secrets page), then:
+The fix is to add the missing Secret reference (see the [ConfigMaps and Secrets](/Kubernetes/ConfigMaps-and-Secrets) page), then:
 
 ```bash
 kubectl rollout restart deployment/orders

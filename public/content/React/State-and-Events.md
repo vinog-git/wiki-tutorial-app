@@ -290,5 +290,5 @@ Note `onChange={(e) => onChange(Number(e.target.value))}`. Without `Number`, `e.
 ## Next Steps
 
 Continue with:
-- **Hooks Deep Dive** - `useEffect`, `useRef`, `useMemo`, `useCallback`, `useReducer`
-- **Forms** - controlled inputs and React 19 Actions
+- **[Hooks Deep Dive](/React/Hooks-Deep-Dive)** - `useEffect`, `useRef`, `useMemo`, `useCallback`, `useReducer`
+- **[Forms](/React/Forms)** - controlled inputs and React 19 Actions

@@ -1,6 +1,6 @@
 # Java Collections Deep Dive
 
-The basics live in **Collections**. This page covers what interviewers actually probe: the interface hierarchy, how each implementation stores data, complexity, and the traps.
+The basics live in **[Collections](/Java/Collections)**. This page covers what interviewers actually probe: the interface hierarchy, how each implementation stores data, complexity, and the traps.
 
 ---
 

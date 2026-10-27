@@ -446,7 +446,7 @@ A query that waits forever is an error waiting to happen. Set limits so failures
 | JDBC `setQueryTimeout` | Client | Cancels a statement from the application side |
 | Connection pool timeouts | Client | Fail fast when the pool is exhausted |
 
-Apply them to migrations too. A long `ALTER TABLE` with no `lock_timeout` can queue behind a long read and block every query behind it (see the Schema Migrations page).
+Apply them to migrations too. A long `ALTER TABLE` with no `lock_timeout` can queue behind a long read and block every query behind it (see the [Schema Migrations](/SQL/Schema-Migrations) page).
 
 ## Common mistakes
 

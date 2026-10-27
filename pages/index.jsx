@@ -188,7 +188,6 @@ export default function Home() {
           {inExamplesList ? (
             <>
               <Sidebar
-                heading="Examples"
                 topics={examples.map((e) => e.slug)}
                 labels={Object.fromEntries(examples.map((e) => [e.slug, e.title]))}
                 selectedTopic={null}
@@ -203,7 +202,6 @@ export default function Home() {
           ) : (
             <>
               <Sidebar
-                heading={example ? 'Pages' : 'Topics'}
                 topics={topics}
                 selectedTopic={subtopic}
                 onSelectTopic={setSubtopic}

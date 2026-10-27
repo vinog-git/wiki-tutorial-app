@@ -4,7 +4,7 @@
 
 The Java Collections Framework provides ready-made data structures for holding groups of objects. The main types are **List**, **Map**, and **Set** — each with different characteristics for ordering, uniqueness, and performance.
 
-> Going further: **Collections Deep Dive** (internals, complexity, `equals`/`hashCode`, concurrent collections), **Collectors** (`groupingBy`, `toMap`, `teeing`), **Custom Collectors** (the `Collector` interface), and **Interview Questions: Sorting**.
+> Going further: **[Collections Deep Dive](/Java/Collections-Deep-Dive)** (internals, complexity, `equals`/`hashCode`, concurrent collections), **[Collectors](/Java/Collectors)** (`groupingBy`, `toMap`, `teeing`), **[Custom Collectors](/Java/Custom-Collectors)** (the `Collector` interface), and **[Interview Questions: Sorting](/Java/Interview-Questions-Sorting)**.
 
 ---
 

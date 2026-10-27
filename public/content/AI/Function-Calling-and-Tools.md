@@ -54,4 +54,4 @@ Open WebUI supports Tools and Functions written in Python. A Tool is a function 
 
 ## Where it leads
 
-Tool calling is the basic building block of agentic AI. For a standard way to share tools across applications, see MCP.
+Tool calling is the basic building block of agentic AI. For a standard way to share tools across applications, see [MCP](/AI/MCP-Model-Context-Protocol).

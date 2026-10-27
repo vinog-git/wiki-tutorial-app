@@ -1,6 +1,6 @@
 # React 19: New Features
 
-React 19 (stable release) brings several new APIs that simplify common patterns like data fetching, forms, and optimistic UI. This page assumes you're already comfortable with `useState` and `useEffect` (see Hooks Deep Dive).
+React 19 (stable release) brings several new APIs that simplify common patterns like data fetching, forms, and optimistic UI. This page assumes you're already comfortable with `useState` and `useEffect` (see [Hooks Deep Dive](/React/Hooks-Deep-Dive)).
 
 ## The `use()` API
 
@@ -229,7 +229,7 @@ const ThemeContext = createContext('light');
 ## Next Steps
 
 Ideas for future topics:
-- Routing with React Router
-- Data fetching patterns and caching
-- Performance optimization (`memo`, code splitting, `React.lazy`)
-- Testing components with React Testing Library
+- [Routing with React Router](/React/Routing)
+- [Data fetching patterns and caching](/React/Data-Fetching)
+- [Performance optimization](/React/Performance-Optimization) (`memo`, code splitting, `React.lazy`)
+- [Testing components with React Testing Library](/React/Testing)

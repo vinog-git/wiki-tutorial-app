@@ -43,6 +43,6 @@ Backends are set either with environment variables at startup or in the admin se
 
 ## Related topics
 
-- Ollama and local models for running the models Open WebUI talks to.
+- [Ollama and local models](/AI/Ollama-and-Local-Models) for running the models Open WebUI talks to.
 - RAG for how the Knowledge feature works.
-- agentic AI for models that act on their own.
+- [agentic AI](/AI/Agentic-AI) for models that act on their own.

@@ -148,4 +148,4 @@ docker volume rm open-webui  # delete all users, chats, and documents
 
 ## Next step
 
-Continue to the Hands-On RAG Lab to load the Northwind sample documents into Open WebUI and to build the same retrieval flow by hand.
+Continue to the [Hands-On RAG Lab](/AI/Hands-On-RAG-Lab) to load the Northwind sample documents into Open WebUI and to build the same retrieval flow by hand.

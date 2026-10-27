@@ -218,8 +218,8 @@ Two details visible here:
 ## Next Steps
 
 Continue with:
-- **Components and Props** - passing data between components
-- **State and Events** - making components interactive
-- **Hooks Deep Dive** - useEffect, useRef, useMemo, and more
-- **Forms** - controlled inputs and React 19 Actions
-- **React 19 New Features** - `use()`, `useOptimistic`, and more
+- **[Components and Props](/React/Components-and-Props)** - passing data between components
+- **[State and Events](/React/State-and-Events)** - making components interactive
+- **[Hooks Deep Dive](/React/Hooks-Deep-Dive)** - useEffect, useRef, useMemo, and more
+- **[Forms](/React/Forms)** - controlled inputs and React 19 Actions
+- **[React 19 New Features](/React/React-19-New-Features)** - `use()`, `useOptimistic`, and more

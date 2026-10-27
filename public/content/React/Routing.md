@@ -246,5 +246,5 @@ function ProductDetail() {
 ## Next Steps
 
 Continue with:
-- **Data Fetching** - loading data with `useEffect`, `use()`, and Suspense
-- **Performance Optimization** - code splitting routes with `React.lazy`
+- **[Data Fetching](/React/Data-Fetching)** - loading data with `useEffect`, `use()`, and Suspense
+- **[Performance Optimization](/React/Performance-Optimization)** - code splitting routes with `React.lazy`

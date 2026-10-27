@@ -212,4 +212,4 @@ Test what the user sees and does (rendered text, clicks, form input) rather than
 ## Next Steps
 
 Continue with:
-- **Interview Questions and Answers** - review core React concepts in Q&A form
+- **[Interview Questions and Answers](/React/Interview-Questions-and-Answers)** - review core React concepts in Q&A form

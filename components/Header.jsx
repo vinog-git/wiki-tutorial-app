@@ -9,24 +9,24 @@ export default function Header({ topic, setTopic }) {
         <div className="logo-mark">{'{}'}</div>
         <div className="logo-text">
           <span className="logo">Dev Wiki</span>
-          <span className="tagline">Learn programming concepts</span>
         </div>
       </div>
 
-      <div className="topic-switcher" role="tablist" aria-label="Topic">
+      <select
+        className="topic-select"
+        aria-label="Topic"
+        value={topic}
+        onChange={(e) => {
+          setTopic(e.target.value);
+          e.target.blur();
+        }}
+      >
         {topics.map((t) => (
-          <button
-            key={t}
-            type="button"
-            role="tab"
-            aria-selected={topic === t}
-            className={`topic-tab ${topic === t ? 'active' : ''}`}
-            onClick={() => setTopic(t)}
-          >
+          <option key={t} value={t}>
             {t}
-          </button>
+          </option>
         ))}
-      </div>
+      </select>
     </header>
   );
 }

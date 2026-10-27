@@ -578,7 +578,7 @@ You cannot sort by the aggregate in one pass — the aggregate doesn't exist unt
 
 ### Q: Top 2 per department, using a custom collector?
 
-The composable version of the bounded-heap trick — see **Custom Collectors** for the `topN` implementation:
+The composable version of the bounded-heap trick — see **[Custom Collectors](/Java/Custom-Collectors)** for the `topN` implementation:
 
 ```java
 Map<String, List<Employee>> top2 = employees.stream()

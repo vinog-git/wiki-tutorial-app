@@ -304,7 +304,7 @@ LIMIT 10;
 ## Next Steps
 
 Learn about:
-- Aggregate functions (COUNT, SUM, AVG, MAX, MIN)
-- GROUP BY and HAVING clauses
-- JOINs to combine data from multiple tables
-- Subqueries for complex filtering
+- [Aggregate functions](/SQL/Aggregate-Functions) (COUNT, SUM, AVG, MAX, MIN)
+- [GROUP BY and HAVING](/SQL/GROUP-BY-and-HAVING) clauses
+- [JOINs](/SQL/Joins) to combine data from multiple tables
+- [Subqueries](/SQL/Subqueries) for complex filtering

@@ -38,7 +38,7 @@ Store each vector with its source text, document name, page, date, and any acces
 ## Limits to know
 
 - Embeddings capture topic and meaning, not exact facts. Use keyword search alongside them for names, codes, and IDs.
-- Long inputs are truncated by most embedding models. Chunk text first. See chunking strategies.
+- Long inputs are truncated by most embedding models. Chunk text first. See [chunking strategies](/AI/Chunking-Strategies).
 
 ## Where this is used
 

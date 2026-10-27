@@ -657,7 +657,7 @@ Grouping by a column with millions of distinct values (like `order_id`) produces
 ## Next Steps
 
 Learn about:
-- Subqueries and CTEs (`WITH` clauses) for multi-step aggregations
+- [Subqueries](/SQL/Subqueries) and CTEs (`WITH` clauses) for multi-step aggregations
 - `FILTER` clause (PostgreSQL) as a cleaner alternative to `CASE` in aggregates
 - `GROUPING SETS` for flexible multi-dimensional summaries
 - Query execution plans (`EXPLAIN`) to understand how your aggregations run

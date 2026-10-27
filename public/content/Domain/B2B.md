@@ -30,7 +30,7 @@ Sales and product work should address each role. A feature that wins the champio
 - **Pipeline and win rate.** How many opportunities exist and how many close.
 - **Average contract value (ACV).** Typical annual value per customer.
 - **Sales cycle length.** Time from first contact to signed contract.
-- **Net revenue retention.** Growth from existing accounts. See SaaS for related measures.
+- **Net revenue retention.** Growth from existing accounts. See [SaaS](/Domain/SaaS) for related measures.
 
 ## Enterprise expectations
 

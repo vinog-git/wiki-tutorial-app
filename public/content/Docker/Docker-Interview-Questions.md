@@ -40,16 +40,16 @@ The default bridge does not run Docker's embedded DNS. A user-defined network do
 `EXPOSE` documents a port. `-p host:container` publishes it so the host can reach it. Containers on the same user-defined network reach each other without publishing. *(See Networking.)*
 
 **12. How do you connect a container to two networks?**
-`docker network connect <net> <container>`, or list multiple networks under the service in Compose. *(See Connecting Between Networks.)*
+`docker network connect <net> <container>`, or list multiple networks under the service in Compose. *(See [Connecting Between Networks](/Docker/Connecting-Between-Networks).)*
 
 **13. A frontend container must call a backend container on a separate network. How?**
-Put a reverse proxy or gateway on both networks, so clients only reach the proxy, and the proxy forwards to the backend by service name. Avoid attaching the backend to the frontend network. *(See Connecting Between Networks.)*
+Put a reverse proxy or gateway on both networks, so clients only reach the proxy, and the proxy forwards to the backend by service name. Avoid attaching the backend to the frontend network. *(See [Connecting Between Networks](/Docker/Connecting-Between-Networks).)*
 
 **14. How do you connect containers on two different hosts?**
-Overlay networks in Swarm, a Kubernetes CNI plugin, or routed networks over a VPN or VPC peering with non-overlapping subnets. *(See Connecting Between Networks.)*
+Overlay networks in Swarm, a Kubernetes CNI plugin, or routed networks over a VPN or VPC peering with non-overlapping subnets. *(See [Connecting Between Networks](/Docker/Connecting-Between-Networks).)*
 
 **15. How does a container reach a database running on the host?**
-Use `host.docker.internal` (built in on Docker Desktop; on Linux add `--add-host=host.docker.internal:host-gateway`), and make sure the database listens on an address reachable from the Docker bridge. *(See Connecting Between Networks.)*
+Use `host.docker.internal` (built in on Docker Desktop; on Linux add `--add-host=host.docker.internal:host-gateway`), and make sure the database listens on an address reachable from the Docker bridge. *(See [Connecting Between Networks](/Docker/Connecting-Between-Networks).)*
 
 **16. What does `internal: true` on a network do?**
 It removes the route to the outside world for containers attached only to that network. Use it for databases and caches. *(See Networking.)*

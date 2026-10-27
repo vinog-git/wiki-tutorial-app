@@ -11,8 +11,8 @@ RAG fixes this without retraining the model. Before the model answers, the syste
 ## The pipeline
 
 1. **Ingest.** Load documents (PDF, Word, Markdown, web pages).
-2. **Chunk.** Split each document into passages. See chunking strategies.
-3. **Embed.** Convert each chunk into a vector with an embedding model. See embeddings and vector databases.
+2. **Chunk.** Split each document into passages. See [chunking strategies](/AI/Chunking-Strategies).
+3. **Embed.** Convert each chunk into a vector with an embedding model. See [embeddings and vector databases](/AI/Embeddings-and-Vector-Databases).
 4. **Store.** Save the vectors and the original text in a vector index.
 5. **Retrieve.** At question time, embed the question and fetch the closest chunks.
 6. **Generate.** Send the question plus the retrieved chunks to the LLM, with instructions to answer from them and cite sources.

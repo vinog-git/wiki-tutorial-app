@@ -75,10 +75,10 @@ Guaranteed (requests equal limits), Burstable (some set), BestEffort (none set).
 It limits how many pods voluntary disruptions, such as node drains during upgrades, may take down at the same time. *(See Probes.)*
 
 **21. HPA vs VPA vs Cluster Autoscaler?**
-HPA changes replica count based on metrics. VPA changes pod resource requests. Cluster Autoscaler (or Karpenter) changes the number of nodes. *(See Autoscaling.)*
+HPA changes replica count based on metrics. VPA changes pod resource requests. Cluster Autoscaler (or Karpenter) changes the number of nodes. *(See [Autoscaling](/Kubernetes/Autoscaling).)*
 
 **22. Why does an HPA not scale when CPU looks high?**
-Common causes: metrics-server is missing, or the pods have no CPU requests set, so utilization cannot be calculated. *(See Autoscaling.)*
+Common causes: metrics-server is missing, or the pods have no CPU requests set, so utilization cannot be calculated. *(See [Autoscaling](/Kubernetes/Autoscaling).)*
 
 ## Operations
 

@@ -227,4 +227,4 @@ Use the **Profiler** tab in React DevTools to record a session and see which com
 ## Next Steps
 
 Continue with:
-- **Testing** - verifying components behave correctly as you optimize them
+- **[Testing](/React/Testing)** - verifying components behave correctly as you optimize them
