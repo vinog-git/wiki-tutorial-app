@@ -8,7 +8,12 @@
   "Embeddings-and-Vector-Databases",
   "Tokens-and-Context-Windows",
   "Prompt-Engineering",
+  "Fine-Tuning-vs-RAG",
   "Function-Calling-and-Tools",
   "MCP-Model-Context-Protocol",
-  "Agentic-AI"
+  "Agentic-AI",
+  "Agentic-AI-Setup",
+  "Agentic-AI-Realtime-Examples",
+  "AI-Security-and-Prompt-Injection",
+  "LLM-Evaluation"
 ]
