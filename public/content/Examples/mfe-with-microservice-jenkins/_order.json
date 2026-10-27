@@ -1,0 +1,15 @@
+[
+  "Overview",
+  "Nx-Workspace-Setup",
+  "Micro-Frontends-with-Module-Federation",
+  "Shared-Library-and-HTTP-Clients",
+  "Spring-Boot-Microservices",
+  "Postgres-One-Container-Three-Databases",
+  "Dockerizing-Frontends-and-Services",
+  "The-Nginx-Gateway",
+  "Docker-Compose-Stack",
+  "Deploy-Only-What-Changed",
+  "Jenkins-Affected-Only-Pipeline",
+  "Running-and-Verifying",
+  "Mistakes-Worth-Avoiding"
+]

@@ -1,0 +1,20 @@
+[
+  "Cloud-Models-Console-and-Billing",
+  "AWS-Overview-and-Core-Concepts",
+  "IAM",
+  "Auditing-CloudTrail-and-Config",
+  "VPC-and-Networking",
+  "Compute-EC2-and-Lambda",
+  "EBS-EFS-and-Storage-Choices",
+  "S3",
+  "ECR",
+  "ECS",
+  "Load-Balancing-DNS-and-CDN",
+  "Databases-RDS-and-DynamoDB",
+  "Messaging-SQS-SNS-EventBridge",
+  "Monitoring-Secrets-and-Security-Services",
+  "Infrastructure-as-Code",
+  "CI-CD-with-CodePipeline",
+  "Generative-AI-Bedrock-and-SageMaker",
+  "AWS-Interview-Questions"
+]

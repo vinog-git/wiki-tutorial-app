@@ -1,0 +1,29 @@
+{
+  "title": "MFE with MicroService + Jenkins",
+  "summary": "Micro frontends and microservices you can deploy one at a time.",
+  "description": "An Nx monorepo with four Angular apps wired by Module Federation, three Spring Boot services, one Postgres, an nginx gateway, and a Jenkins job that rebuilds only what changed. Edit one micro frontend and one container is replaced in about 40 seconds while the other nine keep their uptime.",
+  "stack": [
+    "Nx",
+    "Angular",
+    "Module Federation",
+    "Spring Boot 3.4",
+    "Postgres 16",
+    "nginx",
+    "Docker Compose",
+    "Jenkins"
+  ],
+  "facts": [
+    [
+      "Containers",
+      "10"
+    ],
+    [
+      "Build time",
+      "~5–10 min cold, ~40 s per single-app redeploy"
+    ],
+    [
+      "Prerequisites",
+      "Node 24, Java 21, Maven 3.8+, Docker without sudo"
+    ]
+  ]
+}

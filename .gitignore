@@ -1,0 +1,6 @@
+node_modules/
+.next/
+.dev-server.log
+.playwright-mcp/
+*.log
+.env*
