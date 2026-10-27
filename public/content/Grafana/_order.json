@@ -4,5 +4,8 @@
   "Dashboards-Panels-and-Variables",
   "Loki-Logs-and-LogQL",
   "Alerting-and-On-Call",
+  "New-Relic-Overview-and-Setup",
+  "New-Relic-APM-Logs-and-Tracing",
+  "New-Relic-NRQL-Dashboards-and-Alerts",
   "Observability-Interview-Questions"
 ]
