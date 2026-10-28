@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Header from '@/components/Header';
@@ -8,48 +8,40 @@ import ExamplesIndex from '@/components/ExamplesIndex';
 
 const EXAMPLES = 'Examples';
 
+// Names which page list a category and example produce, so a list fetched for
+// one can't be mistaken for another.
+const listKeyOf = (topic, example) => `${topic}/${example ?? ''}`;
+
 export default function Home() {
   const router = useRouter();
-  const [topic, setTopic] = useState('Java');
-  const [subtopic, setSubtopic] = useState(null);
+  // The URL is the source of truth. Choosing something pushes a new URL, and
+  // back and forward just change it, so every view is derived from these params.
+  const { category, subtopic: urlSubtopic, example } = router.query;
+  // Query params are empty until the router is ready. Fetching before then
+  // would load the default category and ignore the one in the link.
+  const ready = router.isReady;
+  const topic = category || 'Java';
+  const inExamplesList = topic === EXAMPLES && !example;
+
   const [content, setContent] = useState('');
-  const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [topicList, setTopicList] = useState({ key: null, items: [] });
+  // Hides the side menu so the reading pane can use the full width.
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   // Examples are two levels deep: a list of examples, then the pages of one.
-  // `example` is null while the list is showing.
-  const [example, setExample] = useState(null);
   const [examples, setExamples] = useState([]);
   const [examplesLoading, setExamplesLoading] = useState(false);
 
-  // Flipped once the initial URL params have been applied to state. Every
-  // other effect waits on it: without the gate they run against the default
-  // category first, and the fetch that starts there consumes the subtopic the
-  // URL asked for (or writes a half-restored URL back over the real one).
-  const [restored, setRestored] = useState(false);
-  const initialized = useRef(false);
-  // Holds a subtopic from the URL that needs to be restored after topics load.
-  const urlSubtopic = useRef(null);
-
-  const inExamplesList = topic === EXAMPLES && !example;
+  // A list fetched for another category counts as empty until this one arrives.
+  const topics = topicList.key === listKeyOf(topic, example) ? topicList.items : [];
+  // Falls back to the first page when the URL names none, or one that doesn't exist.
+  const subtopic = topics.includes(urlSubtopic) ? urlSubtopic : (topics[0] ?? null);
   const activeExample = examples.find((e) => e.slug === example);
-
-  // Restore state from URL query params on first load.
-  useEffect(() => {
-    if (!router.isReady || initialized.current) return;
-    initialized.current = true;
-    const { category, subtopic: sub, example: ex } = router.query;
-    if (category) setTopic(category);
-    if (ex) setExample(ex);
-    if (sub) urlSubtopic.current = sub;
-    // Batched with the setState calls above, so the first render that sees
-    // `restored` also sees the category and example from the URL.
-    setRestored(true);
-  }, [router.isReady, router.query]);
 
   // The example list is only needed for that one category.
   useEffect(() => {
-    if (!restored || topic !== EXAMPLES || examples.length > 0) return;
+    if (!ready || topic !== EXAMPLES || examples.length > 0) return;
     let cancelled = false;
     const fetchExamples = async () => {
       setExamplesLoading(true);
@@ -65,19 +57,13 @@ export default function Home() {
     };
     fetchExamples();
     return () => { cancelled = true; };
-  }, [restored, topic, examples.length]);
+  }, [ready, topic, examples.length]);
 
-  // Fetch the topic list when the category (or the chosen example) changes.
+  // Fetch the page list whenever the category or example changes.
   // Uses a cancellation flag so a stale response from the previous category
-  // can't clobber the subtopic after the user has already switched.
+  // can't land after the user has already moved on.
   useEffect(() => {
-    if (!restored) return;
-    if (inExamplesList) {
-      setTopics([]);
-      setSubtopic(null);
-      setContent('');
-      return;
-    }
+    if (!ready || inExamplesList) return;
 
     let cancelled = false;
     const fetchTopics = async () => {
@@ -86,50 +72,22 @@ export default function Home() {
         if (example) query.set('example', example);
         const res = await fetch(`/api/topics?${query}`);
         const data = await res.json();
-        if (cancelled) return;
-        setTopics(data);
-        const desired = urlSubtopic.current;
-        urlSubtopic.current = null;
-        if (desired && data.includes(desired)) {
-          setSubtopic(desired);
-        } else if (data.length > 0) {
-          setSubtopic(data[0]);
-        } else {
-          setSubtopic(null);
-        }
+        if (!cancelled) setTopicList({ key: listKeyOf(topic, example), items: data });
       } catch (err) {
         if (!cancelled) console.error('Error fetching topics:', err);
       }
     };
     fetchTopics();
     return () => { cancelled = true; };
-  }, [restored, topic, example, inExamplesList]);
+  }, [ready, topic, example, inExamplesList]);
 
-  // Fetch content and sync the URL whenever the active page changes.
-  // URL update is skipped until the router is ready so we never overwrite
-  // the original URL params before we've had a chance to read them.
+  // Fetch the page content whenever the active page changes.
   useEffect(() => {
-    if (!restored) return;
-
-    if (inExamplesList) {
-      router.replace({ pathname: '/', query: { category: topic } }, undefined, {
-        shallow: true,
-      });
+    if (!ready || inExamplesList || !subtopic) {
+      setContent('');
+      setLoading(false);
       return;
     }
-
-    if (!subtopic) return;
-
-    router.replace(
-      {
-        pathname: '/',
-        query: example
-          ? { category: topic, example, subtopic }
-          : { category: topic, subtopic },
-      },
-      undefined,
-      { shallow: true }
-    );
 
     let cancelled = false;
     const fetchContent = async () => {
@@ -151,25 +109,34 @@ export default function Home() {
     };
     fetchContent();
     return () => { cancelled = true; };
-  }, [restored, topic, example, subtopic, inExamplesList]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [ready, topic, example, subtopic, inExamplesList]);
+
+  // Each change of view is pushed, not replaced, so it gets its own history
+  // entry and the browser's back and forward buttons can step through them.
+  const navigate = (query) => {
+    router.push({ pathname: '/', query }, undefined, { shallow: true });
+  };
 
   const handleTopicChange = (newTopic) => {
-    setTopic(newTopic);
-    setExample(null);
-    setSubtopic(null);
-    setContent('');
+    navigate({ category: newTopic });
   };
 
   const handleSelectExample = (slug) => {
-    setExample(slug);
-    setSubtopic(null);
-    setContent('');
+    navigate({ category: topic, example: slug });
   };
 
   const handleBackToExamples = () => {
-    setExample(null);
-    setSubtopic(null);
-    setContent('');
+    navigate({ category: topic });
+  };
+
+  const handleSelectSubtopic = (name) => {
+    // Re-picking the open page would stack an identical history entry.
+    if (name === subtopic) return;
+    navigate(
+      example
+        ? { category: topic, example, subtopic: name }
+        : { category: topic, subtopic: name }
+    );
   };
 
   return (
@@ -182,17 +149,24 @@ export default function Home() {
       </Head>
 
       <div className="app-container">
-        <Header topic={topic} setTopic={handleTopicChange} />
+        <Header
+        topic={topic}
+        setTopic={handleTopicChange}
+        sidebarOpen={sidebarOpen}
+        onToggleSidebar={() => setSidebarOpen((open) => !open)}
+      />
 
         <div className="main-content">
           {inExamplesList ? (
             <>
-              <Sidebar
-                topics={examples.map((e) => e.slug)}
-                labels={Object.fromEntries(examples.map((e) => [e.slug, e.title]))}
-                selectedTopic={null}
-                onSelectTopic={handleSelectExample}
-              />
+              {sidebarOpen && (
+                <Sidebar
+                  topics={examples.map((e) => e.slug)}
+                  labels={Object.fromEntries(examples.map((e) => [e.slug, e.title]))}
+                  selectedTopic={null}
+                  onSelectTopic={handleSelectExample}
+                />
+              )}
               <ExamplesIndex
                 examples={examples}
                 onSelectExample={handleSelectExample}
@@ -201,13 +175,15 @@ export default function Home() {
             </>
           ) : (
             <>
-              <Sidebar
-                topics={topics}
-                selectedTopic={subtopic}
-                onSelectTopic={setSubtopic}
-                onBack={example ? handleBackToExamples : undefined}
-                backLabel="All examples"
-              />
+              {sidebarOpen && (
+                <Sidebar
+                  topics={topics}
+                  selectedTopic={subtopic}
+                  onSelectTopic={handleSelectSubtopic}
+                  onBack={example ? handleBackToExamples : undefined}
+                  backLabel="All examples"
+                />
+              )}
               <ReadingPane
                 topic={topic}
                 parent={activeExample?.title}
