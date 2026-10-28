@@ -211,6 +211,7 @@ Consumers on the old schema ignore `currency`; consumers on the new one read it.
 | Compute aggregates or joins over event streams in your code | Kafka Streams |
 | Complex analytics over streams with SQL | Apache Flink or ksqlDB |
 | Enforce event contracts across teams | Schema Registry with compatibility rules |
+| Route, convert and ingest files or HTTP feeds from many systems, visually | [Apache NiFi](/Kafka/Apache-NiFi) |
 
 ## Key takeaways
 
