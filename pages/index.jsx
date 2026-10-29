@@ -139,6 +139,22 @@ export default function Home() {
     );
   };
 
+  // A search result can be a topic, an example or a page. Choosing the view
+  // that is already open does nothing, so the history isn't padded with copies.
+  const handleSearchSelect = ({ category: nextCategory, example: nextExample, subtopic: nextSubtopic }) => {
+    const isOpen =
+      nextCategory === topic &&
+      nextExample === example &&
+      (!nextSubtopic || nextSubtopic === subtopic);
+    if (isOpen) return;
+
+    navigate({
+      category: nextCategory,
+      ...(nextExample && { example: nextExample }),
+      ...(nextSubtopic && { subtopic: nextSubtopic }),
+    });
+  };
+
   return (
     <>
       <Head>
@@ -154,6 +170,7 @@ export default function Home() {
         setTopic={handleTopicChange}
         sidebarOpen={sidebarOpen}
         onToggleSidebar={() => setSidebarOpen((open) => !open)}
+        onSearchSelect={handleSearchSelect}
       />
 
         <div className="main-content">

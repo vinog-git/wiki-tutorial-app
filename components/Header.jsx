@@ -1,8 +1,8 @@
 import React from 'react';
+import Search from '@/components/Search';
+import { TOPICS } from '@/lib/topics';
 
-export default function Header({ topic, setTopic, sidebarOpen, onToggleSidebar }) {
-  const topics = ['Learning-Path', 'Java', 'Docker', 'Kubernetes', 'AWS', 'Kafka', 'Kibana', 'Grafana', 'SQL', 'Angular', 'React', 'AI', 'Domain', 'Examples'];
-
+export default function Header({ topic, setTopic, sidebarOpen, onToggleSidebar, onSearchSelect }) {
   return (
     <header className="header">
       <div className="header-left">
@@ -35,6 +35,8 @@ export default function Header({ topic, setTopic, sidebarOpen, onToggleSidebar }
         </div>
       </div>
 
+      <Search onSelect={onSearchSelect} />
+
       <select
         className="topic-select"
         aria-label="Topic"
@@ -44,7 +46,7 @@ export default function Header({ topic, setTopic, sidebarOpen, onToggleSidebar }
           e.target.blur();
         }}
       >
-        {topics.map((t) => (
+        {TOPICS.map((t) => (
           <option key={t} value={t}>
             {t}
           </option>
