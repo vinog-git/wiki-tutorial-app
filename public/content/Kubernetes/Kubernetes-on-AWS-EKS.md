@@ -178,8 +178,61 @@ aws eks list-addons --cluster-name demo
 - **Container Insights** or the **AWS Distro for OpenTelemetry** for metrics and traces.
 - **Prometheus and Grafana** if you want the open-source stack; see the Observability page in the Java section.
 
+## Non-Functional Requirements and Disaster Recovery
+
+EKS keeps the control plane available. Your workloads must survive a node, zone or region failure, and the Kubernetes defaults are too slow for a 5-minute target when a node dies.
+
+### Non-functional requirements
+
+| Requirement | Target | How to meet it |
+|---|---|---|
+| Control plane availability | 99.95% a month (standard), 99.99% (provisioned) | Choose the tier that matches your SLA; AWS operates the control plane |
+| Node failure | Replacement pods running within 5 minutes | Shorter pod toleration time (below) |
+| Zone failure | Stateless services keep serving | Node groups in three AZs, topology spread constraints, PodDisruptionBudgets |
+| Region failure | Under 5 minutes | A second cluster running in another region, with traffic moved by Route 53 |
+
+### Why the default is too slow
+
+When a node stops responding, Kubernetes marks it unreachable and adds the `node.kubernetes.io/unreachable` taint. Pods that do not set their own toleration get a default of 300 seconds, so they stay on the dead node for 5 minutes before eviction. That wait starts after the node monitor grace period, which is 40 seconds on EKS. The total is about 5 minutes 40 seconds before a replacement is scheduled. That is already over the target.
+
+Set a shorter toleration on each workload. Add these to the pod template of the Deployment:
+
+```yaml
+tolerations:
+  - key: node.kubernetes.io/unreachable
+    operator: Exists
+    effect: NoExecute
+    tolerationSeconds: 30
+  - key: node.kubernetes.io/not-ready
+    operator: Exists
+    effect: NoExecute
+    tolerationSeconds: 30
+```
+
+On EKS you cannot change the control plane's default flags. Set this per workload, or inject it across namespaces with a mutating admission policy such as Kyverno. A shorter value moves pods sooner, but a flapping node will move pods more often, so tune it together with your readiness probes.
+
+### Zones and regions
+
+Spread each workload across zones so that one zone failure leaves replicas running:
+
+```yaml
+# Under spec.template.spec of the Deployment
+topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: topology.kubernetes.io/zone
+    whenUnsatisfiable: DoNotSchedule
+    labelSelector:
+      matchLabels:
+        app: orders
+```
+
+- **Stateful workloads.** An EBS volume lives in one AZ, so a pod that uses one can restart only in that zone. Run replicas in each zone, through the database's own replication or an operator, or use EFS for shared files.
+- **A standby cluster.** Keep a second EKS cluster running in another region, built from the same manifests in Git. Building a cluster during an outage is too slow: the control plane, node groups and add-ons must all come up before a single pod runs.
+- **Backups.** Back up objects and volumes with a tool such as Velero. It recovers deleted namespaces and bad changes, but it is not a 5-minute failover on its own.
+
 ## Key takeaways
 
+- The default 300-second toleration on pods is longer than a 5-minute node recovery allows. Set `tolerationSeconds` per workload.
 - EKS runs the control plane; you own node capacity, add-ons and workloads.
 - Pods get VPC IP addresses, so plan subnet sizes early.
 - Give pods AWS access with IRSA or EKS Pod Identity, never with access keys.

@@ -235,8 +235,35 @@ Always set an expiry on silences. A silence without one becomes a permanent blin
 | Measure pages per on-call shift | Burnout is a reliability risk |
 | Post-incident review for every page-severity incident | Turns incidents into fewer future pages |
 
+## Non-Functional Requirements and Disaster Recovery
+
+A 5-minute recovery leaves no time for a person to notice, diagnose and act. Alerting has two jobs here: detect a hard outage within about a minute, and start the automated recovery without waiting for someone to acknowledge a page.
+
+### Non-functional requirements
+
+| Requirement | Target | How to meet it |
+|---|---|---|
+| Detect a hard outage | Under 1 minute | Synthetic probes every 10 seconds from more than one location; alert rule evaluated every 10 seconds with `for: 30s` |
+| Page the on-call person | Within a minute of the alert firing | Short notification group wait (the default is 30 seconds); an escalation policy in PagerDuty or Opsgenie |
+| Automated recovery | Starts without a human | Health-check-driven failover at the load balancer, DNS or database, triggered by the probe rather than the page |
+| Human decisions | Only data-loss choices | The runbook names each decision and the person who makes it |
+
+### Burn-rate alerts are too slow for a hard outage
+
+The burn-rate rule earlier on this page looks at a 1-hour and a 5-minute window. It protects the error budget well, but it reacts over minutes. Use a synthetic probe to catch a full outage quickly, and keep burn-rate alerts for slow degradation.
+
+### Disaster declaration
+
+Disaster management is partly process. Write these down before you need them:
+
+- **Who declares** a regional failover, by role, and how: one button, one command, or one approval.
+- **When it is declared.** For example: if automated recovery has not restored the service within 5 minutes, the incident lead declares a disaster and starts the manual runbook.
+- **Who communicates** with customers, and how often. Name the person who updates the status page.
+- **What gets measured.** After the incident, record the real time of each step and compare it with the budget.
+
 ## Key takeaways
 
+- For a 5-minute target, detect outages with short-interval probes. Burn-rate alerts are for slow degradation.
 - Alert rules evaluate queries; the `for` period stops single bad samples from paging.
 - Alert on user impact and SLO burn rate, not on resource thresholds alone.
 - Contact points deliver; notification policies route by labels and group related alerts.

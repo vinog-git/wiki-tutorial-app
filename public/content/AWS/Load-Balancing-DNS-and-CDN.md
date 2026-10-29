@@ -241,8 +241,47 @@ Certificates for CloudFront must be in **us-east-1** in ACM. Attach the certific
 | Compute | ECS on Fargate or EC2 ASG | Target type `ip` for Fargate |
 | Data | Aurora or RDS in private subnets | Security groups reference the app tier |
 
+## Non-Functional Requirements and Disaster Recovery
+
+The load balancing layer decides how quickly traffic leaves a failed instance or region. For a 5-minute recovery it must detect a failure in about 30 seconds and move traffic within about a minute.
+
+### Non-functional requirements
+
+| Requirement | Target | How this layer meets it |
+|---|---|---|
+| No single point of failure | Survives the loss of an AZ | ALB in at least two AZs, with targets in each |
+| Failed instance removed | Under 30 seconds | Target group health check every 10 seconds; unhealthy after 2 failures |
+| Region failover | Traffic moved within about a minute of detection | Route 53 failover records with fast health checks and a short TTL |
+| Static content during an origin outage | Keeps serving | CloudFront caches at the edge; origin groups send requests to a second origin on selected error codes |
+
+### Tighten the health checks
+
+The default ALB health check interval is 30 seconds, so an instance can keep taking traffic for a long time after it fails. A 10-second interval with 2 failures brings that down to about 20 seconds:
+
+```bash
+aws elbv2 modify-target-group \
+  --target-group-arn "$TG_ARN" \
+  --health-check-interval-seconds 10 \
+  --unhealthy-threshold-count 2
+```
+
+For region failover, create a health check on the regional endpoint. Fast mode checks every 10 seconds, and the failure threshold defaults to 3:
+
+```bash
+aws route53 create-health-check \
+  --caller-reference "api-use1-$(date +%s)" \
+  --health-check-config '{"Type":"HTTPS","FullyQualifiedDomainName":"api-use1.example.com","ResourcePath":"/health","Port":443,"RequestInterval":10,"FailureThreshold":3}'
+```
+
+Attach the check to the PRIMARY failover record. The SECONDARY record points at the standby region. For failover records that are not aliases, set the TTL to 60 seconds or less. Alias records take their TTL from their target.
+
+> Some clients keep using an old DNS answer past its TTL. As a rough estimate, plan for up to about 90 seconds of DNS delay. The time budget in [Microservices Architecture](/Java/Microservices-Architecture) leaves room for it.
+
+Point the health check at an endpoint that checks the instance and its essential dependencies, not every dependency. If a shared database is slow, a deep health check can pull a whole region out of DNS.
+
 ## Key takeaways
 
+- A 5-minute failover needs a 10-second health check interval, a DNS TTL of 60 seconds or less, and a standby that is already running.
 - ALB for HTTP routing and containers; NLB for TCP, UDP and static IPs; choose by protocol and routing needs.
 - Health checks decide what gets traffic; point them at a readiness endpoint, not a heavy dependency check.
 - Route 53 alias records are the AWS-native way to point names at AWS resources; choose a routing policy for failover, canaries or latency.

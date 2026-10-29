@@ -159,9 +159,48 @@ A backup you have not restored is unverified. Do this on a schedule, on a spare 
 - [ ] Compose files and images are in git and the registry
 - [ ] Secrets can be re-issued without reading the old ones
 
+## Non-Functional Requirements and Disaster Recovery
+
+A backup protects data. It does not keep a service running. If the recovery path is "rebuild the host, restore the dump, start the stack", the recovery time is the sum of all three, and a large dump alone can take longer than 5 minutes. For that target, the standby must already hold the data and be ready to run.
+
+### Non-functional requirements
+
+| Requirement | Target | What it means for this stack |
+|---|---|---|
+| Recovery time (RTO) | Under 5 minutes | The standby host is already running, with images pulled and the stack defined |
+| Recovery point (RPO) | Under 1 minute of orders | The scheduled backup above runs once a day, so its RPO is up to 24 hours. It cannot be the only copy |
+| Durability | Survives loss of the host and the account | Off-host copies with versioning and Object Lock |
+| Proven recovery | Restore tested every quarter, with timings | The restore drill above |
+
+### Two copies, two jobs
+
+- A **streaming replica** on a second host keeps the live data within seconds of the primary. It is the copy you promote in a 5-minute failover.
+- A **dump or snapshot** on a schedule protects against bad writes and deletes. The replica copies those within seconds too.
+
+On PostgreSQL 12 or later, promotion is one statement on the standby host:
+
+```bash
+docker exec -it db-standby psql -U app -d orders -c "SELECT pg_promote();"
+```
+
+Point the application at the standby through a DNS name or an environment variable that you change in one place. Editing several Compose files during an outage takes too long.
+
+### Recovery budget for a host failure
+
+| Step | Target time | What must already be true |
+|---|---|---|
+| Detect | Under 30 s | A health probe on the orders endpoint, with an alert (see [Alerting and On-Call](/Grafana/Alerting-and-On-Call)) |
+| Promote | Seconds | The standby is streaming from the primary |
+| Switch | Under 1 min | The application reads the database host from DNS or the environment |
+| Start | Under 1 min | The Compose file and images are already on the standby host |
+| Verify | Under 1 min | Smoke test: health endpoint, row count, a known order |
+
+A single Docker host cannot survive a region loss within 5 minutes. For that, run the same stack in a second region, as described in [Microservices Architecture](/Java/Microservices-Architecture).
+
 ## Key takeaways
 
 - Rebuild images, version configuration, back up data.
+- A 5-minute recovery needs a warm standby host. Restoring a dump onto a cold host takes longer than the target.
 - Use logical dumps for databases; file copies of a running database can be inconsistent.
 - Store backups off the host, encrypted, with retention and versioning.
 - A backup is only proven by a restore drill; record how long it takes.

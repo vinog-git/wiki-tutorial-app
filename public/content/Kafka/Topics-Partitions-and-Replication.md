@@ -138,8 +138,46 @@ $K --delete --topic hello
 
 Deletion is irreversible and removes all data for the topic. Confirm the topic name and check the consumers that depend on it first.
 
+## Non-Functional Requirements and Disaster Recovery
+
+Replication settings decide what a broker failure costs. With the production settings above, a broker can fail without losing an acknowledged message. Losing a whole region needs a second cluster, and Kafka does not switch to it on its own.
+
+### Non-functional requirements
+
+| Requirement | Target | Setting |
+|---|---|---|
+| No acknowledged message lost in a cluster | RPO of zero | `replication.factor=3`, `min.insync.replicas=2`, producers with `acks=all` |
+| Broker failure | A short pause while a new leader is elected | The same settings; one broker can fail and writes continue |
+| No data loss from a stale replica | Safe leader election | `unclean.leader.election.enable=false` (the default) |
+| Region failure | Under 5 minutes | A second cluster kept current with MirrorMaker 2 |
+
+With `min.insync.replicas=2` and three replicas, one broker can fail and writes continue. If two are down, producers using `acks=all` get errors for the affected partitions. That is the trade-off: those partitions refuse writes rather than accept writes that could be lost.
+
+### Cross-region failover with MirrorMaker 2
+
+MirrorMaker 2 copies topics and consumer group offsets from the primary cluster to a second cluster. Replication is asynchronous, so messages not yet copied when the primary fails are missing from the secondary. That gap is your RPO.
+
+```properties
+# mm2.properties
+clusters = primary, dr
+primary.bootstrap.servers = kafka-primary:9092
+dr.bootstrap.servers = kafka-dr:9092
+primary->dr.enabled = true
+primary->dr.topics = orders.*
+```
+
+Failover is a runbook, not a single switch:
+
+1. Confirm the primary is down, and decide whether to accept the gap.
+2. Point producers at the DR cluster.
+3. Point consumers at the DR cluster. They resume from the translated offsets that MirrorMaker 2 writes as checkpoints.
+4. Reconcile the gap when the primary returns.
+
+A five-minute target means this runbook is scripted and rehearsed. Measure the time from the decision to the first message consumed on the DR cluster.
+
 ## Key takeaways
 
+- Cross-region failover is asynchronous with MirrorMaker 2, and Kafka does not do it by itself. Rehearse the switch, and treat the replication lag as your RPO.
 - The partition count sets the maximum parallelism for a consumer group; plan it because it is hard to undo cleanly.
 - Choose keys for the ordering you need, and avoid hot keys.
 - Production: replication factor 3, `min.insync.replicas=2`, `acks=all`, no unclean leader election.

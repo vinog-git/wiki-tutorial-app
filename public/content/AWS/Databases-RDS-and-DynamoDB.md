@@ -235,8 +235,34 @@ Use `COPY` to load bulk data from S3 in parallel; row-by-row inserts are slow in
 
 Test restores. A backup that has never been restored is a hope, not a plan.
 
+## Non-Functional Requirements and Disaster Recovery
+
+The database sets the floor for recovery. If the only way back is a restore from backup, the database alone will miss a 5-minute target, whatever the application does.
+
+### Non-functional requirements
+
+| Requirement | Target | Option |
+|---|---|---|
+| Survive an AZ failure with no manual step | Under 1 minute | Multi-AZ DB cluster with two readable standbys (failover typically under 35 seconds), or Aurora (typically under 30 seconds) |
+| No data loss within a region | RPO of zero | Commits wait for a copy in another AZ; Aurora stores six copies across three AZs |
+| Survive a region failure | Under 5 minutes | Aurora Global Database, or DynamoDB global tables |
+| Recover from bad writes | Any point in the retention window | Point-in-time recovery (RDS 1 to 35 days; DynamoDB 35 days) |
+
+### Region failure options
+
+**Aurora Global Database** replicates to a secondary region asynchronously. An unplanned failover can lose the writes that had not yet reached that region, measured in seconds. A planned switchover has an RPO of zero, because the secondary catches up before the switch. AWS describes the RTO of an unplanned failover as on the order of minutes, so script the promotion and rehearse it before you rely on it for a 5-minute target.
+
+**DynamoDB global tables** are active-active. Every Region accepts writes, so there is no promotion step: clients use the nearest healthy Region. The default mode resolves conflicting writes to the same item by timestamp, and the older write is dropped. Design writes so two Regions rarely update the same item at once. Multi-Region tables carry a 99.999% availability SLA.
+
+**Cross-region read replicas** are a disaster recovery copy, not a fast failover. Promotion is a manual or scripted step, and the replica can lag behind the primary.
+
+### Replication is not a backup
+
+Replication copies mistakes. A dropped table or a bad migration reaches every replica within seconds. Keep point-in-time recovery, and copy snapshots to another region. Test a restore on the schedule described in Backups and recovery above.
+
 ## Key takeaways
 
+- Multi-AZ or Aurora covers an AZ failure without a manual step. A region failure needs Aurora Global Database or DynamoDB global tables, plus a rehearsed runbook, because 5 minutes is tight for a promotion.
 - RDS Multi-AZ gives failover; read replicas give read scale. They are not interchangeable.
 - Use RDS Proxy or pooling for Lambda and many short connections.
 - DynamoDB is designed around access patterns: choose the partition key for high cardinality, and use Query, not Scan.

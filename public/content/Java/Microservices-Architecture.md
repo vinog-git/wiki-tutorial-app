@@ -360,6 +360,58 @@ Services that are separated for clear reasons:
 | receipt ≠ payment | PDF generation can fail/retry independently — a bug must not roll back a payment |
 | notification ≠ everything | All SES/SNS dependencies in one place; templates change without touching domain |
 
+## Non-Functional Requirements and Disaster Recovery
+
+Functional requirements say what the system does. Non-functional requirements (NFRs) say how well it must do it. For the hotel booking system, the central NFR is recovery: **a failure must cost under 5 minutes of downtime.** That is a recovery time objective (RTO) of 5 minutes or less for each incident.
+
+### Non-functional requirements
+
+| Requirement | Target for the hotel system | How the design supports it |
+|---|---|---|
+| Availability | 99.95% a month for search and booking | Two or more replicas of every service, spread across availability zones (AZs) |
+| Recovery time (RTO) | Under 5 minutes per incident | Automatic failover and replacement; no manual step on the booking path |
+| Recovery point (RPO) | Near zero for bookings and payments | Booking data is replicated to a standby before a failure; events in Kafka can be replayed |
+| Latency | p95 under 300 ms for search and booking | Timeouts and circuit breakers on every remote call (see [Resilience Patterns](/Java/Resilience-Patterns)) |
+| Isolation | A non-critical failure never blocks a booking | Receipts and notifications run asynchronously; service boundaries are also failure boundaries |
+
+> **Read the target carefully.** Availability is a budget over time. At 99.95% a month you can lose about 22 minutes, so a 5-minute recovery fits. At 99.99% the budget is about 4 minutes a month, and one 5-minute incident breaks it. A total annual budget of 5 minutes is about 99.999%, which allows one incident of this size a year and no planned downtime.
+
+### Disaster recovery strategies
+
+Recovery strategies trade cost for speed. Backups alone cannot meet 5 minutes. A warm standby can, if failover is automatic and the standby is already scaled up. Active-active is the most reliable choice for losing a whole region.
+
+| Strategy | What runs in the standby region | Typical RTO | Typical RPO | Meets 5 minutes? |
+|---|---|---|---|---|
+| Backup and restore | Nothing; rebuild from backups | Hours | Hours | No |
+| Pilot light | Data replicated; core services off | Tens of minutes | Minutes | No |
+| Warm standby | A scaled-down copy, running | Minutes | Seconds | Yes, if failover is automatic and capacity is pre-scaled |
+| Multi-site active-active | A full copy serving traffic | Near zero | Near zero | Yes |
+
+These ranges follow the four strategies in the AWS disaster recovery whitepaper. Treat them as orders of magnitude, not promises.
+
+### Time budget for a regional failover
+
+This budget shows how a warm standby can finish inside 5 minutes. Each number is a plan to test, not a measurement.
+
+| Step | Budget | Mechanism |
+|---|---|---|
+| Detect | 30 s | Synthetic probe every 10 s; declared down after 3 failures |
+| Route | 60 s | Failover DNS record with a 60-second TTL |
+| Promote data | 90 s | Script promotes a warm replica in the standby region |
+| Start services | 60 s | Standby services already running at size; readiness probes gate traffic |
+| Verify | 20 s | Automated smoke test before the region takes full traffic |
+| **Total** | **4 min 20 s** | **40 seconds of spare time** |
+
+The spare time is small. Some clients keep using an old DNS answer past its TTL, and a slow database promotion uses up the budget quickly. That is why active-active is the stronger option for a whole region.
+
+### What makes the budget achievable
+
+- **Stateless services.** A service that keeps no session data on one instance can restart on any other. Put sessions in Redis or the database.
+- **Automatic failover.** Health checks trigger the routing change. Nobody should have to act at 3 a.m. to switch regions.
+- **Warm capacity.** Scaling up during an outage uses up the budget. Keep the standby at a size that can take real traffic.
+- **Replication plus backups.** Replication gives a near-zero RPO, but it copies a bad delete within seconds. Keep point-in-time backups for that case.
+- **Rehearsal.** Run a region failover drill each quarter, and record the real time of each step. Compare it with the budget.
+
 ## Interview Questions
 
 **Q: How do microservices communicate?**
