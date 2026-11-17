@@ -1,0 +1,14 @@
+[
+  "ACID-Transactions",
+  "Isolation-Levels-and-Anomalies",
+  "Indexes-and-B-Trees",
+  "Normalization-and-Denormalization",
+  "CAP-and-PACELC",
+  "Replication-and-Sharding",
+  "Saga-Pattern",
+  "Multi-Tenant-Database-Design",
+  "Multi-Region-Database-Design",
+  "Multi-Region-Deployment",
+  "Circuit-Breaker",
+  "Fault-Tolerance"
+]
